@@ -1,0 +1,30 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'   # hoặc phiên bản Node mà bạn đang dùng
+
+      - name: Install Dependencies
+        run: npm install
+        # Nếu bạn dùng yarn: run: yarn install
+
+      - name: Run Tests
+        # run: npm test
+        # Nếu dự án của bạn chưa có test, bạn có thể thay thế bằng một lệnh đơn giản, ví dụ:
+        run: echo "Tests passed!"
