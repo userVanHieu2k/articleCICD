@@ -32,7 +32,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'   # Sử dụng Temurin JDK (cũ là AdoptOpenJDK)
-          java-version: '11'         # Chọn phiên bản Java phù hợp, ví dụ 11
+          java-version: '17'         # Chọn phiên bản Java phù hợp, ví dụ 11
 
       # Bước 5: Cache Gradle Wrapper để tiết kiệm thời gian build
       - name: Cache Gradle Wrapper
