@@ -40,11 +40,11 @@ jobs:
       - name: Build iOS App
         run: |
           cd ios
-          xcodebuild -workspace YourApp.xcworkspace \
-                     -scheme YourApp \
+          xcodebuild -workspace articleCICD.xcworkspace \
+                     -scheme articleCICD \
                      -sdk iphoneos \
                      -configuration Release \
-                     archive -archivePath build/YourApp.xcarchive
+                     archive -archivePath build/articleCICD.xcarchive
         continue-on-error: false  # Dừng nếu có lỗi
 
       # Bước 6: Export IPA
@@ -52,7 +52,7 @@ jobs:
         run: |
           cd ios
           xcodebuild -exportArchive \
-                     -archivePath build/YourApp.xcarchive \
+                     -archivePath build/articleCICD.xcarchive \
                      -exportOptionsPlist exportOptions.plist \
                      -exportPath build
         continue-on-error: false  # Dừng nếu có lỗi
