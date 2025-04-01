@@ -1,0 +1,61 @@
+name: Build iOS App
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-ios:
+    runs-on: macos-latest  # Cần dùng macOS để build iOS app
+
+    steps:
+      # Bước 1: Checkout code
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Bước 2: Cài đặt Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Bước 3: Cài đặt dependencies
+      - name: Install Dependencies
+        run: npm install
+        # Nếu dùng Yarn: run: yarn install
+
+      # Bước 4: Cài đặt CocoaPods
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          pod install --repo-update
+
+      # Bước 5: Build iOS app bằng xcodebuild
+      - name: Build iOS App
+        run: |
+          cd ios
+          xcodebuild -workspace YourApp.xcworkspace \
+                     -scheme YourApp \
+                     -sdk iphoneos \
+                     -configuration Release \
+                     archive -archivePath build/YourApp.xcarchive
+
+      # Bước 6: Export IPA
+      - name: Export IPA
+        run: |
+          cd ios
+          xcodebuild -exportArchive \
+                     -archivePath build/YourApp.xcarchive \
+                     -exportOptionsPlist exportOptions.plist \
+                     -exportPath build
+
+      # Bước 7: Upload IPA file
+      - name: Upload iOS Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app
+          path: ios/build/*.ipa
