@@ -27,18 +27,16 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install
+        continue-on-error: false  # Dừng nếu có lỗi
 
       # Bước 4: Cài đặt CocoaPods
       - name: Install CocoaPods
         run: |
           cd ios
           pod install --repo-update
+        continue-on-error: false  # Dừng nếu có lỗi
 
-      # Bước 5: Set Xcode version to 16
-      - name: Set Xcode Version to 16
-        run: sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
-
-      # Bước 6: Build iOS app bằng xcodebuild
+      # Bước 5: Build iOS app bằng xcodebuild
       - name: Build iOS App
         run: |
           cd ios
@@ -47,8 +45,9 @@ jobs:
                      -sdk iphoneos \
                      -configuration Release \
                      archive -archivePath build/YourApp.xcarchive
+        continue-on-error: false  # Dừng nếu có lỗi
 
-      # Bước 7: Export IPA
+      # Bước 6: Export IPA
       - name: Export IPA
         run: |
           cd ios
@@ -56,8 +55,9 @@ jobs:
                      -archivePath build/YourApp.xcarchive \
                      -exportOptionsPlist exportOptions.plist \
                      -exportPath build
+        continue-on-error: false  # Dừng nếu có lỗi
 
-      # Bước 8: Upload IPA file
+      # Bước 7: Upload IPA file
       - name: Upload iOS Build Artifact
         uses: actions/upload-artifact@v4
         with:
