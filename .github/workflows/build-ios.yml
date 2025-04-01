@@ -25,14 +25,16 @@ jobs:
 
       # Bước 3: Cài đặt dependencies
       - name: Install Dependencies
-        run: npm install
-        # Nếu dùng Yarn: run: yarn install
+        run: |
+          npm install
+        continue-on-error: false  # Dừng nếu có lỗi
 
       # Bước 4: Cài đặt CocoaPods
       - name: Install CocoaPods
         run: |
           cd ios
           pod install --repo-update
+        continue-on-error: false  # Dừng nếu có lỗi
 
       # Bước 5: Build iOS app bằng xcodebuild
       - name: Build iOS App
@@ -43,6 +45,7 @@ jobs:
                      -sdk iphoneos \
                      -configuration Release \
                      archive -archivePath build/YourApp.xcarchive
+        continue-on-error: false  # Dừng nếu có lỗi
 
       # Bước 6: Export IPA
       - name: Export IPA
@@ -52,6 +55,7 @@ jobs:
                      -archivePath build/YourApp.xcarchive \
                      -exportOptionsPlist exportOptions.plist \
                      -exportPath build
+        continue-on-error: false  # Dừng nếu có lỗi
 
       # Bước 7: Upload IPA file
       - name: Upload iOS Build Artifact
