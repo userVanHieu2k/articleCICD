@@ -23,6 +23,9 @@ jobs:
           node-version: '18'
 
       # Bước 3: Cài đặt các dependencies (npm hoặc yarn)
+      - name: Configure NPM Registry
+        run: npm config set registry https://registry.npmjs.org/
+
       - name: Install Dependencies
         run: npm install
         # Nếu bạn dùng yarn, thay bằng: run: yarn install
