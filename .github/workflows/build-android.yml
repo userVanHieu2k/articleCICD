@@ -11,37 +11,31 @@ on:
 jobs:
   build-android:
     runs-on: ubuntu-latest
+
     steps:
-      # Bước 1: Checkout repository
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Bước 2: Thiết lập Node.js (nếu dự án của bạn dùng Node để cài dependencies)
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      # Bước 3: Cài đặt các dependencies (npm hoặc yarn)
       - name: Install Dependencies
         run: npm install
-        # Nếu bạn dùng yarn, thay bằng: run: yarn install
 
-      # Bước 4: Cài đặt Java bằng action
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'   # Sử dụng Temurin JDK (cũ là AdoptOpenJDK)
-          java-version: '17'         # Chọn phiên bản Java phù hợp, ví dụ 11
+          distribution: 'temurin'
+          java-version: '17'
 
-      # Bước 5: Cache Gradle Wrapper để tiết kiệm thời gian build
       - name: Cache Gradle Wrapper
         uses: actions/cache@v3
         with:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
 
-      # Bước 6: Cache Gradle Dependencies
       - name: Cache Gradle Dependencies
         uses: actions/cache@v3
         with:
@@ -50,21 +44,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-caches-
 
-      # Bước 7: Cho phép file gradlew có quyền thực thi
       - name: Make Gradlew Executable
         run: chmod +x ./android/gradlew
 
-      # Bước 8: Build Android App Bundle hoặc APK
       - name: Build Android App Bundle
         run: |
           cd android
           ./gradlew bundleRelease --no-daemon
-          # Nếu bạn muốn build APK: ./gradlew assembleRelease --no-daemon
 
-      # Bước 9: Upload artifact (file APK/AAB) nếu cần
       - name: Upload Android Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: android-app-bundle
           path: android/app/build/outputs/bundle/release/*.aab
-          # Nếu bạn build APK, đổi path cho phù hợp
